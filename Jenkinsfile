@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'toko_buku_online:latest'
+        DOCKER_IMAGE = 'toko_buku_online'
         DOCKERHUB_USER = 'koplomen'
         DOCKERHUB_CRED = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
-        ANSIBLE_SERVER = 'user@192.168.1.50'
+        ANSIBLE_SERVER = 'shaquille@172.23.72.233'
     }
 
     stages {
