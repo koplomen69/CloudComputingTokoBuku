@@ -5,7 +5,8 @@ pipeline {
         DOCKER_IMAGE = 'toko_buku_online:latest'
         DOCKERHUB_USER = 'koplomen'
         DOCKERHUB_CRED = 'dockerhub-creds'
-        ANSIBLE_SERVER = 'shaquille@shaq-server'
+        ANSIBLE_SERVER = 'shaquille@shaq-192.168.1.50'
+        K8S_SERVER = 'user@k8s-server'  // Menambahkan variabel K8S_SERVER yang sebelumnya hilang
     }
 
     stages {
@@ -18,12 +19,12 @@ pipeline {
             }
         }
 
-        // Stage 2: Mengirim File
+        // Stage 2: Mengirim File ke Server Ansible
         stage('Mengirim File') {
             steps {
                 echo 'Mengirim file ke server Ansible...'
                 sh '''
-                    scp Dockerfile ${ANSIBLE_SERVER}:/home/user/Dockerfile
+                    scp Dockerfile ${ANSIBLE_SERVER}:/home/shaquille/Dockerfile
                 '''
             }
         }
@@ -56,7 +57,7 @@ pipeline {
             steps {
                 echo 'Mengirim file konfigurasi Kubernetes...'
                 sh '''
-                    scp k8s-config.yaml ${K8S_SERVER}:/home/user/k8s-config.yaml
+                    scp k8s-config.yaml ${K8S_SERVER}:/home/shaquille/k8s-config.yaml
                 '''
             }
         }
@@ -66,7 +67,7 @@ pipeline {
             steps {
                 echo 'Melakukan deployment ke Kubernetes menggunakan Ansible...'
                 sh '''
-                    ssh ${ANSIBLE_SERVER} "ansible-playbook -i /home/user/inventory /home/user/k8s-deployment.yaml"
+                    ssh ${ANSIBLE_SERVER} "ansible-playbook -i /home/shaquille/inventory /home/shaquille/k8s-deployment.yaml"
                 '''
             }
         }
