@@ -5,70 +5,46 @@ pipeline {
         DOCKER_IMAGE = 'toko_buku_online:latest'
         DOCKERHUB_USER = 'koplomen'
         DOCKERHUB_CRED = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
-        ANSIBLE_SERVER = 'shaquille@shaq-192.168.1.50'
-        K8S_SERVER = 'koplomen@k8s-server'  // Menambahkan variabel K8S_SERVER yang sebelumnya hilang
+        ANSIBLE_SERVER = 'user@192.168.1.50'
     }
 
     stages {
-
-        // Stage 1: Checkout Kode Sumber
         stage('Checkout Kode Sumber') {
             steps {
-                echo 'Mengambil kode sumber dari Git...'
                 git branch: 'main', url: 'https://github.com/koplomen69/CloudComputingTokoBuku.git'
             }
         }
 
-        // Stage 2: Mengirim File ke Server Ansible
-        stage('Mengirim File') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Mengirim file ke server Ansible...'
-                sh '''
-                    scp Dockerfile ${ANSIBLE_SERVER}:/home/shaquille/Dockerfile
-                '''
-            }
-        }
-
-        // Stage 3: Build Image Docker
-        stage('Build Image Docker') {
-            steps {
-                echo 'Membangun image Docker...'
-                sh '''
-                    docker build -t ${DOCKERHUB_USER}/${DOCKER_IMAGE} .
-                '''
-            }
-        }
-
-        // Stage 4: Push ke DockerHub
-        stage('Push ke DockerHub') {
-            steps {
-                echo 'Push image Docker ke DockerHub...'
-                withCredentials([string(credentialsId: "${DOCKERHUB_CRED}", variable: 'DOCKERHUB_PASS')]) {
-                    sh '''
-                        docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}
-                        docker push ${DOCKERHUB_USER}/${DOCKER_IMAGE}
-                    '''
+                script {
+                    // Build docker image
+                    sh 'docker build -t ${DOCKERHUB_USER}/${DOCKER_IMAGE} .'
                 }
             }
         }
 
-        // Stage 5: Copy File ke Server Kubernetes
-        stage('Copy File ke Server Kubernetes') {
+        stage('Push to DockerHub') {
             steps {
-                echo 'Mengirim file konfigurasi Kubernetes...'
-                sh '''
-                    scp k8s-config.yaml ${K8S_SERVER}:/home/shaquille/k8s-config.yaml
-                '''
+                script {
+                    // Login to DockerHub and push the image
+                    withCredentials([string(credentialsId: "${DOCKERHUB_CRED}", variable: 'DOCKERHUB_PASS')]) {
+                        sh 'docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}'
+                        sh 'docker push ${DOCKERHUB_USER}/${DOCKER_IMAGE}'
+                    }
+                }
             }
         }
 
-        // Stage 6: Deployment Menggunakan Ansible
-        stage('Deployment Menggunakan Ansible') {
+        stage('Deploy to Kubernetes') {
             steps {
-                echo 'Melakukan deployment ke Kubernetes menggunakan Ansible...'
-                sh '''
-                    ssh ${ANSIBLE_SERVER} "ansible-playbook -i /home/shaquille/inventory /home/shaquille/k8s-deployment.yaml"
-                '''
+                script {
+                    // Copy deployment file to Ansible server
+                    sh 'scp k8s-deployment.yaml ${ANSIBLE_SERVER}:/home/ansible/k8s-deployment.yaml'
+
+                    // Deploy to Kubernetes using Ansible
+                    sh 'ssh ${ANSIBLE_SERVER} "kubectl apply -f /home/ansible/k8s-deployment.yaml"'
+                }
             }
         }
     }

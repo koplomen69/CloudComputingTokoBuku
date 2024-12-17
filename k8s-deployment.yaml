@@ -1,11 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: toko-buku-deployment
-  labels:
-    app: toko-buku-online
+  name: toko-buku-online
 spec:
-  replicas: 3  # Menentukan jumlah pod yang akan dijalankan
+  replicas: 3
   selector:
     matchLabels:
       app: toko-buku-online
@@ -15,40 +13,7 @@ spec:
         app: toko-buku-online
     spec:
       containers:
-      - name: toko-buku-container
-        image: koplomen/toko_buku_online:latest  # Ganti sesuai image di DockerHub
+      - name: toko-buku-online
+        image: <DOCKERHUB_USER>/toko_buku_online:latest
         ports:
-        - containerPort: 80  # Port di dalam container yang akan dibuka
-        env:
-        - name: DB_HOST
-          value: "toko_buku_online_db"  # Sesuaikan dengan nama service database
-        - name: DB_USER
-          value: "laravel"
-        - name: DB_PASSWORD
-          value: "password"
-        - name: DB_NAME
-          value: "toko_online"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: toko-buku-service
-spec:
-  selector:
-    app: toko-buku-online
-  ports:
-    - protocol: TCP
-      port: 80  # Port yang akan diakses dari luar
-      targetPort: 80  # Port yang terbuka di dalam pod
-  type: LoadBalancer  # Expose ke publik jika perlu akses dari luar
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: toko-buku-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi  # Ukuran storage yang diminta
+        - containerPort: 3000
