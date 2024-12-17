@@ -27,23 +27,19 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    try {
-                        echo "Logging into DockerHub..."
-                        withCredentials([string(credentialsId: "dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0", variable: 'DOCKERHUB_PASS')]) {
-                            bat 'docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%'
-                            bat 'docker info'
-                        }
-
-                        echo "Pushing Docker image to DockerHub..."
-                        bat 'docker push %DOCKERHUB_USER%/%DOCKER_IMAGE%'
-                        echo "Push to DockerHub complete."
-                    } catch (Exception e) {
-                        echo "Error during DockerHub push: ${e.getMessage()}"
-                        throw e
+                    echo "Logging into DockerHub..."
+                    withCredentials([string(credentialsId: "dockerhub_token", variable: 'DOCKERHUB_PASS')]) {
+                        bat 'docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%'
+                        bat 'docker info'
                     }
+
+                    echo "Pushing Docker image to DockerHub..."
+                    bat 'docker push %DOCKERHUB_USER%/%DOCKER_IMAGE%'
+                    echo "Push to DockerHub complete."
                 }
             }
         }
+
 
 
 
