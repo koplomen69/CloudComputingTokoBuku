@@ -48,11 +48,13 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Copy deployment file to Ansible server
-                    bat 'scp k8s-deployment.yaml %ANSIBLE_SERVER%:/home/ansible/k8s-deployment.yaml'
+                    // Menggunakan SCP untuk menyalin file ke server Ansible
+                    withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-credentials', keyFileVariable: 'SSH_KEY')]) {
+                        bat 'scp -i %SSH_KEY% k8s-deployment.yaml shaquille@172.23.72.233:/home/ansible/k8s-deployment.yaml'
 
-                    // Deploy to Kubernetes using Ansible
-                    bat 'ssh %ANSIBLE_SERVER% "kubectl apply -f /home/ansible/k8s-deployment.yaml"'
+                        // Deploy ke Kubernetes menggunakan kubectl di server Ansible
+                        bat 'ssh -i %SSH_KEY% shaquille@172.23.72.233 "kubectl apply -f /home/ansible/k8s-deployment.yaml"'
+                    }
                 }
             }
         }
