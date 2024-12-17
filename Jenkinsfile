@@ -6,7 +6,6 @@ pipeline {
         DOCKERHUB_USER = 'koplomen'
         DOCKERHUB_CRED = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
         ANSIBLE_SERVER = 'shaquille@172.23.72.233'
-        DOCKERHUB_PASS = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
     }
 
     stages {
@@ -49,7 +48,7 @@ pipeline {
             steps {
                 script {
                     // Menggunakan SCP untuk menyalin file ke server Ansible
-                    withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-credentials', keyFileVariable: 'SSH_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'docker_ssh', keyFileVariable: 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0')]) {
                         bat 'scp -i %SSH_KEY% k8s-deployment.yaml shaquille@172.23.72.233:/home/ansible/k8s-deployment.yaml'
 
                         // Deploy ke Kubernetes menggunakan kubectl di server Ansible
