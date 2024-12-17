@@ -3,16 +3,8 @@ kind: ConfigMap
 metadata:
   name: toko-buku-config
   namespace: default
-  labels:
-    app: toko-buku-online
-
-# Data konfigurasi yang dapat diakses oleh container
-
 data:
-  DB_HOST: "toko_buku_online_db"
-  DB_USER: "laravel"
+  DB_HOST: "localhost"
+  DB_USER: "user"
   DB_PASSWORD: "password"
   DB_NAME: "toko_online"
-  APP_ENV: "production"
-  APP_DEBUG: "false"
-  APP_KEY: "base64:l3If4gGXu0owkaD3stIap06XkSFu/wcxur8+D4yxw3I="
