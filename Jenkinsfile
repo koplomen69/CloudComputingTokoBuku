@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     // Menggunakan SCP untuk menyalin file ke server Ansible
-                    withCredentials([sshUserPrivateKey(credentialsId: 'docker_ssh', keyFileVariable: 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'shaquille', keyFileVariable: 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0SSH_KEY')]) {
                         bat 'scp -i %SSH_KEY% k8s-deployment.yaml shaquille@172.23.72.233:/home/ansible/k8s-deployment.yaml'
 
                         // Deploy ke Kubernetes menggunakan kubectl di server Ansible
