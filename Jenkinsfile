@@ -29,17 +29,19 @@ pipeline {
                 script {
                     // Login ke DockerHub dan push image
                     withCredentials([string(credentialsId: "dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0", variable: 'DOCKERHUB_PASS')]) {
-                        bat 'echo %DOCKERHUB_USER% %DOCKERHUB_PASS%'
+                        echo "Login ke DockerHub dengan user: %DOCKERHUB_USER%"
                         bat 'docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%'
 
                         // Periksa login apakah berhasil
                         bat 'docker info'
 
+                        // Push image ke DockerHub
                         bat 'docker push %DOCKERHUB_USER%/%DOCKER_IMAGE%'
                     }
                 }
             }
         }
+
 
 
         stage('Deploy to Kubernetes') {
