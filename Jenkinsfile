@@ -4,9 +4,9 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'toko_buku_online:latest'
         DOCKERHUB_USER = 'koplomen'
-        DOCKERHUB_CRED = 'dockerhub-creds'
+        DOCKERHUB_CRED = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
         ANSIBLE_SERVER = 'shaquille@shaq-192.168.1.50'
-        K8S_SERVER = 'user@k8s-server'  // Menambahkan variabel K8S_SERVER yang sebelumnya hilang
+        K8S_SERVER = 'koplomen@k8s-server'  // Menambahkan variabel K8S_SERVER yang sebelumnya hilang
     }
 
     stages {
