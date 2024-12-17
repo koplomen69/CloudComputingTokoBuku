@@ -6,6 +6,7 @@ pipeline {
         DOCKERHUB_USER = 'koplomen'
         DOCKERHUB_CRED = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
         ANSIBLE_SERVER = 'shaquille@172.23.72.233'
+        DOCKERHUB_PASS = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
     }
 
     stages {
