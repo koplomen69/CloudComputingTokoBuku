@@ -2,73 +2,82 @@ pipeline {
     agent any
 
     environment {
-        MYSQL_ROOT_PASSWORD = credentials('mysql-root-password') // Tambahkan ke Jenkins Credentials
-        MYSQL_USER = credentials('mysql-user') // Tambahkan ke Jenkins Credentials
-        MYSQL_PASSWORD = credentials('mysql-password') // Tambahkan ke Jenkins Credentials
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // Jika ingin push ke Docker Hub
+        DOCKER_IMAGE = 'toko_buku_online:latest'
+        DOCKERHUB_USER = 'koplomen'
+        DOCKERHUB_CRED = 'dockerhub-creds'
+        ANSIBLE_SERVER = 'shaquille@shaq-server'
     }
 
     stages {
 
-        stage('Checkout') {
+        // Stage 1: Checkout Kode Sumber
+        stage('Checkout Kode Sumber') {
             steps {
-                echo 'Checking out the code from GitHub...'
+                echo 'Mengambil kode sumber dari Git...'
                 git branch: 'main', url: 'https://github.com/koplomen69/CloudComputingTokoBuku.git'
             }
         }
 
-        stage('Build Docker Images') {
+        // Stage 2: Mengirim File
+        stage('Mengirim File') {
             steps {
-                echo 'Building Docker Images...'
+                echo 'Mengirim file ke server Ansible...'
                 sh '''
-                    docker-compose down
-                    docker-compose build
+                    scp Dockerfile ${ANSIBLE_SERVER}:/home/user/Dockerfile
                 '''
             }
         }
 
-        stage('Run Containers') {
+        // Stage 3: Build Image Docker
+        stage('Build Image Docker') {
             steps {
-                echo 'Starting Docker Containers...'
+                echo 'Membangun image Docker...'
                 sh '''
-                    docker-compose up -d
+                    docker build -t ${DOCKERHUB_USER}/${DOCKER_IMAGE} .
                 '''
             }
         }
 
-        stage('Run Tests') {
+        // Stage 4: Push ke DockerHub
+        stage('Push ke DockerHub') {
             steps {
-                echo 'Running Laravel tests...'
+                echo 'Push image Docker ke DockerHub...'
+                withCredentials([string(credentialsId: "${DOCKERHUB_CRED}", variable: 'DOCKERHUB_PASS')]) {
+                    sh '''
+                        docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}
+                        docker push ${DOCKERHUB_USER}/${DOCKER_IMAGE}
+                    '''
+                }
+            }
+        }
+
+        // Stage 5: Copy File ke Server Kubernetes
+        stage('Copy File ke Server Kubernetes') {
+            steps {
+                echo 'Mengirim file konfigurasi Kubernetes...'
                 sh '''
-                    docker exec toko_online php artisan migrate --force
-                    docker exec toko_online php artisan test
+                    scp k8s-config.yaml ${K8S_SERVER}:/home/user/k8s-config.yaml
                 '''
             }
         }
 
-        stage('Deploy') {
+        // Stage 6: Deployment Menggunakan Ansible
+        stage('Deployment Menggunakan Ansible') {
             steps {
-                echo 'Deploying Application...'
+                echo 'Melakukan deployment ke Kubernetes menggunakan Ansible...'
                 sh '''
-                    docker exec toko_online php artisan config:cache
-                    docker exec toko_online php artisan route:cache
+                    ssh ${ANSIBLE_SERVER} "ansible-playbook -i /home/user/inventory /home/user/k8s-deployment.yaml"
                 '''
             }
         }
-
     }
 
     post {
-        always {
-            echo 'Pipeline finished. Cleaning up Docker containers...'
-            sh 'docker-compose down'
-        }
         success {
-            echo 'Build succeeded. Application deployed successfully!'
+            echo 'Pipeline berhasil dijalankan!'
         }
         failure {
-            echo 'Build failed. Cleaning up Docker containers...'
-            sh 'docker-compose down'
+            echo 'Pipeline gagal, periksa log untuk detail kesalahan!'
         }
     }
 }
