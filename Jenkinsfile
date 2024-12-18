@@ -42,11 +42,14 @@ pipeline {
         }
     }
 
-    post {
+        post {
         success {
             echo 'Pipeline berhasil dijalankan!'
 
             script {
+                // Debugging: Cek apakah Docker image ada
+                bat 'docker images'
+
                 // Kirim notifikasi jika build sukses
                 bat '''
                 curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline berhasil dijalankan dan deploy sukses!\"}" %TEAMS_WEBHOOK_URL%
@@ -57,6 +60,9 @@ pipeline {
             echo 'Pipeline gagal, periksa log untuk detail kesalahan!'
 
             script {
+                // Debugging: Cek status Docker image setelah build
+                bat 'docker images'
+
                 // Kirim notifikasi jika build gagal
                 bat '''
                 curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline gagal, periksa log untuk detail kesalahan.\"}" %TEAMS_WEBHOOK_URL%
@@ -64,4 +70,5 @@ pipeline {
             }
         }
     }
+
 }
