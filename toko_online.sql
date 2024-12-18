@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2024 at 02:21 PM
+-- Generation Time: Dec 18, 2024 at 10:58 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -80,7 +80,9 @@ CREATE TABLE `favorites` (
 --
 
 INSERT INTO `favorites` (`id`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2024-12-07 13:14:01', '2024-12-07 13:14:01');
+(1, 1, 1, '2024-12-07 13:14:01', '2024-12-07 13:14:01'),
+(2, 13, 1, '2024-12-07 13:29:10', '2024-12-07 13:29:10'),
+(3, 13, 1002, '2024-12-07 13:29:21', '2024-12-07 13:29:21');
 
 -- --------------------------------------------------------
 
@@ -95,6 +97,13 @@ CREATE TABLE `feedback` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `feedback`
+--
+
+INSERT INTO `feedback` (`id`, `email`, `pesan`, `created_at`, `updated_at`) VALUES
+(14, 'shaquille.wibisono@gmail.com', 'membeli buku', '2024-12-07 13:32:56', '2024-12-07 13:32:56');
 
 -- --------------------------------------------------------
 
@@ -362,7 +371,8 @@ CREATE TABLE `tbl_carts` (
 
 INSERT INTO `tbl_carts` (`id`, `idUser`, `id_barang`, `qty`, `price`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'guest123', 1, 1, 24000, 1, '2024-06-08 07:41:20', '2024-06-08 07:41:24'),
-(2, 'guest123', 1003, 1, 100000, 0, '2024-12-07 13:13:52', '2024-12-07 13:13:52');
+(2, 'guest123', 1003, 1, 100000, 0, '2024-12-07 13:13:52', '2024-12-07 13:13:52'),
+(3, 'guest123', 1002, 1, 100000, 0, '2024-12-07 13:29:06', '2024-12-07 13:29:06');
 
 -- --------------------------------------------------------
 
@@ -433,7 +443,8 @@ INSERT INTO `users` (`id`, `nik`, `name`, `email`, `email_verified_at`, `passwor
 (9, '20240611212', 'Reynold Ankunding', 'kschuster@example.org', NULL, '$2y$10$9Mbz1EsYQNSztek6CL9gMeYhr5zIUT5RVQvjrIncQlQqVhgxt5dLi', 1, 0, 'default.png', '52649 Streich Spring Apt. 541\nLaurenchester, FL 75063', '651.620.6979', '2006-01-30', 1, 1, NULL, '2024-06-11 13:31:40', '2024-06-11 13:31:40'),
 (10, '2024061129', 'Ms. Violet Brekke', 'eward@example.net', NULL, '$2y$10$cMHF4lSS7M3FTvmfHz/OROPx9tE07q8SdEok.BNXJgPjT2MMyD6hW', 1, 0, 'default.png', '438 Jacobson Crest Suite 115\nRoslynmouth, GA 40491-8766', '+1 (559) 232-4068', '1998-10-23', 1, 0, NULL, '2024-06-11 13:31:40', '2024-06-11 13:31:40'),
 (11, '20240611633', 'Michaela Bosco', 'dicki.allie@example.net', NULL, '$2y$10$xEO6jD4Mpa.PJrPwaH4pLedZCMdPMGGs3RVTM4XJvW5AzRsWIFsO2', 1, 0, 'default.png', '774 Virginie Estates\nDamonburgh, HI 09959-9243', '+1 (678) 529-2349', '1974-08-25', 1, 0, NULL, '2024-06-11 13:31:40', '2024-06-11 13:31:40'),
-(12, '20240611830', 'Test User', 'test@example.com', NULL, '$2y$10$X1AzW9YGGavWS57ua9ShbexLDhY7ddQXJ7MMqjcnnNjfTd.i34zx2', 1, 0, 'default.png', '11098 Alvina Key Suite 182\nKulaston, AL 42600', '(802) 912-5555', '1974-03-03', 1, 0, NULL, '2024-06-11 13:31:40', '2024-06-11 13:31:40');
+(12, '20240611830', 'Test User', 'test@example.com', NULL, '$2y$10$X1AzW9YGGavWS57ua9ShbexLDhY7ddQXJ7MMqjcnnNjfTd.i34zx2', 1, 0, 'default.png', '11098 Alvina Key Suite 182\nKulaston, AL 42600', '(802) 912-5555', '1974-03-03', 1, 0, NULL, '2024-06-11 13:31:40', '2024-06-11 13:31:40'),
+(13, 'Member691', 'dedi', 'dedi@gmail.com', NULL, '$2y$10$3nlCKTzJGShK1mktpTm3Me2066ABInImCO8Dt8FepXBNR87VNqaEy', 1, 1, 'default.png', 'dedi dedi', '0812222222', '2024-12-07', 1, 0, NULL, '2024-12-07 13:28:16', '2024-12-07 13:28:16');
 
 --
 -- Indexes for dumped tables
@@ -545,13 +556,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `kritik_sarans`
@@ -587,7 +598,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `tbl_carts`
 --
 ALTER TABLE `tbl_carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `transaksis`
@@ -599,7 +610,7 @@ ALTER TABLE `transaksis`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
