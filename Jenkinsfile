@@ -39,25 +39,25 @@ pipeline {
                 }
             }
         }
+    }
 
-        post {
-            success {
-                echo 'Pipeline berhasil dijalankan!'
+    post {
+        success {
+            echo 'Pipeline berhasil dijalankan!'
 
-                script {
-                    bat '''
-                    curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline berhasil dijalankan dan deploy sukses!\"}" %TEAMS_WEBHOOK_URL%
-                    '''
-                }
+            script {
+                bat '''
+                curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline berhasil dijalankan dan deploy sukses!\"}" %TEAMS_WEBHOOK_URL%
+                '''
             }
-            failure {
-                echo 'Pipeline gagal, periksa log untuk detail kesalahan!'
+        }
+        failure {
+            echo 'Pipeline gagal, periksa log untuk detail kesalahan!'
 
-                script {
-                    bat '''
-                    curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline gagal, periksa log untuk detail kesalahan.\"}" %TEAMS_WEBHOOK_URL%
-                    '''
-                }
+            script {
+                bat '''
+                curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline gagal, periksa log untuk detail kesalahan.\"}" %TEAMS_WEBHOOK_URL%
+                '''
             }
         }
     }
