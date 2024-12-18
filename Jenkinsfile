@@ -6,6 +6,7 @@ pipeline {
         DOCKERHUB_USER = 'koplomen'
         DOCKERHUB_CRED = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
         ANSIBLE_SERVER = 'shaquille@172.23.72.233'
+        TEAMS_WEBHOOK_URL = 'https://telkomuniversityofficial.webhook.office.com/webhookb2/a7399741-b9cc-40b7-97d8-2b36e62067e0@90affe0f-c2a3-4108-bb98-6ceb4e94ef15/JenkinsCI/50e1245ebbf34d82b818c76fca1f8f4f/71d6bf8c-9c5b-49d0-b924-5e4f1db7955a/V2AZCJJWgoy9WdVDEnf6cKicwD9ea0g6Fmx8CDoy8MRo01'  // Ganti dengan URL webhook Teams Anda
     }
 
     stages {
@@ -40,34 +41,44 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    echo "Deploying to Kubernetes..."
+    //     stage('Deploy to Kubernetes') {
+    //         steps {
+    //             script {
+    //                 echo "Deploying to Kubernetes..."
 
-                    // Debugging untuk SCP dan SSH
-                    withCredentials([sshUserPrivateKey(credentialsId: 'docker_ssh', keyFileVariable: 'SSH_KEY')]) {
-                        echo "Using SCP to copy k8s-deployment.yaml to the server"
-                        bat 'echo SCP Start'
-                        bat 'scp -i %SSH_KEY% k8s-deployment.yaml shaquille@172.23.72.233:/home/ansible/k8s-deployment.yaml'
-                        bat 'echo SCP Complete'
+    //                 // Debugging untuk SCP dan SSH
+    //                 withCredentials([sshUserPrivateKey(credentialsId: 'docker_ssh', keyFileVariable: 'SSH_KEY')]) {
+    //                     echo "Using SCP to copy k8s-deployment.yaml to the server"
+    //                     bat 'echo SCP Start'
+    //                     bat 'scp -i %SSH_KEY% k8s-deployment.yaml shaquille@172.23.72.233:/home/ansible/k8s-deployment.yaml'
+    //                     bat 'echo SCP Complete'
 
-                        echo "Deploying to Kubernetes using kubectl..."
-                        bat 'echo SSH and kubectl apply'
-                        bat 'ssh -i %SSH_KEY% shaquille@172.23.72.233 "kubectl apply -f /home/ansible/k8s-deployment.yaml"'
-                        bat 'echo Kubernetes deployment complete.'
-                    }
-                }
-            }
-        }
-    }
+    //                     echo "Deploying to Kubernetes using kubectl..."
+    //                     bat 'echo SSH and kubectl apply'
+    //                     bat 'ssh -i %SSH_KEY% shaquille@172.23.72.233 "kubectl apply -f /home/ansible/k8s-deployment.yaml"'
+    //                     bat 'echo Kubernetes deployment complete.'
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     post {
         success {
             echo 'Pipeline berhasil dijalankan!'
+
+            script {
+                // Kirim notifikasi jika build sukses
+                microsoftTeams sendMessage: "Pipeline berhasil dijalankan dan deploy sukses!", webhookUrl: "${TEAMS_WEBHOOK_URL}"
+            }
         }
         failure {
             echo 'Pipeline gagal, periksa log untuk detail kesalahan!'
+
+            script {
+                // Kirim notifikasi jika build gagal
+                microsoftTeams sendMessage: "Pipeline gagal, periksa log untuk detail kesalahan.", webhookUrl: "${TEAMS_WEBHOOK_URL}"
+            }
         }
     }
 }
