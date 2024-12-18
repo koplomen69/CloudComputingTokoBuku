@@ -40,8 +40,9 @@ pipeline {
                 }
             }
         }
+    }
 
-   post {
+    post {
         success {
             echo 'Pipeline berhasil dijalankan!'
 
