@@ -41,27 +41,27 @@ pipeline {
             }
         }
 
-    //     stage('Deploy to Kubernetes') {
-    //         steps {
-    //             script {
-    //                 echo "Deploying to Kubernetes..."
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    echo "Deploying to Kubernetes..."
 
-    //                 // Debugging untuk SCP dan SSH
-    //                 withCredentials([sshUserPrivateKey(credentialsId: 'docker_ssh', keyFileVariable: 'SSH_KEY')]) {
-    //                     echo "Using SCP to copy k8s-deployment.yaml to the server"
-    //                     bat 'echo SCP Start'
-    //                     bat 'scp -i %SSH_KEY% k8s-deployment.yaml shaquille@172.23.72.233:/home/ansible/k8s-deployment.yaml'
-    //                     bat 'echo SCP Complete'
+                    // Debugging untuk SCP dan SSH
+                    withCredentials([sshUserPrivateKey(credentialsId: 'docker_ssh', keyFileVariable: 'SSH_KEY')]) {
+                        echo "Using SCP to copy k8s-deployment.yaml to the server"
+                        bat 'echo SCP Start'
+                        bat 'scp -i %SSH_KEY% k8s-deployment.yaml shaquille@172.23.72.233:/home/ansible/k8s-deployment.yaml'
+                        bat 'echo SCP Complete'
 
-    //                     echo "Deploying to Kubernetes using kubectl..."
-    //                     bat 'echo SSH and kubectl apply'
-    //                     bat 'ssh -i %SSH_KEY% shaquille@172.23.72.233 "kubectl apply -f /home/ansible/k8s-deployment.yaml"'
-    //                     bat 'echo Kubernetes deployment complete.'
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+                        echo "Deploying to Kubernetes using kubectl..."
+                        bat 'echo SSH and kubectl apply'
+                        bat 'ssh -i %SSH_KEY% shaquille@172.23.72.233 "kubectl apply -f /home/ansible/k8s-deployment.yaml"'
+                        bat 'echo Kubernetes deployment complete.'
+                    }
+                }
+            }
+        }
+    }
 
     post {
         success {
