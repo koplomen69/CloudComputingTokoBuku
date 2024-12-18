@@ -63,13 +63,15 @@ pipeline {
         }
     }
 
-    post {
+   post {
         success {
             echo 'Pipeline berhasil dijalankan!'
 
             script {
                 // Kirim notifikasi jika build sukses
-                microsoftTeams sendMessage: "Pipeline berhasil dijalankan dan deploy sukses!", webhookUrl: "${TEAMS_WEBHOOK_URL}"
+                bat '''
+                curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline berhasil dijalankan dan deploy sukses!\"}" %TEAMS_WEBHOOK_URL%
+                '''
             }
         }
         failure {
@@ -77,7 +79,9 @@ pipeline {
 
             script {
                 // Kirim notifikasi jika build gagal
-                microsoftTeams sendMessage: "Pipeline gagal, periksa log untuk detail kesalahan.", webhookUrl: "${TEAMS_WEBHOOK_URL}"
+                bat '''
+                curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"Pipeline gagal, periksa log untuk detail kesalahan.\"}" %TEAMS_WEBHOOK_URL%
+                '''
             }
         }
     }
