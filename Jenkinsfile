@@ -6,7 +6,7 @@ pipeline {
         DOCKERHUB_USER = 'koplomen'
         DOCKERHUB_CRED = 'dckr_pat_dGNVknLQAa-zckcBsj3vcF6Ylu0'
         ANSIBLE_SERVER = 'shaquille@172.23.72.233'
-        TEAMS_WEBHOOK_URL = 'https://telkomuniversityofficial.webhook.office.com/webhookb2/a7399741-b9cc-40b7-97d8-2b36e62067e0@90affe0f-c2a3-4108-bb98-6ceb4e94ef15/JenkinsCI/50e1245ebbf34d82b818c76fca1f8f4f/71d6bf8c-9c5b-49d0-b924-5e4f1db7955a/V2AZCJJWgoy9WdVDEnf6cKicwD9ea0g6Fmx8CDoy8MRo01'  // Ganti dengan URL webhook Teams Anda
+        TEAMS_WEBHOOK_URL = 'https://telkomuniversityofficial.webhook.office.com/webhookb2/a7399741-b9cc-40b7-97d8-2b36e62067e0@90affe0f-c2a3-4108-bb98-6ceb4e94ef15/JenkinsCI/597d62f353914602aaaa02f0f6318774/71d6bf8c-9c5b-49d0-b924-5e4f1db7955a/V2oQpIncItqf4g0-9DJsUfIkBu0FMHUFKzlVtujY5iyfY1'  // Ganti dengan URL webhook Teams Anda
     }
 
     stages {
